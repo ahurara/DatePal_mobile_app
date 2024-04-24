@@ -1,43 +1,56 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Slick from "react-native-slick";
+import { StyleSheet, Text, View, Dimensions,ViewStyle  } from "react-native";
+import Carousel from 'react-native-snap-carousel';
 
 export default function RecSlider() {
+
+  const screenWidth = Dimensions.get('window').width;
+
+  const data = [
+    {  recomendation: 'This is slide 1' },
+    {  recomendation: 'This is slide 2' },
+    {  recomendation: 'This is slide 3' },
+  ];
+
+  const renderItem = ({ item }) => (
+    <View style={styles.slide}>
+      <Text style={styles.recomendation}>{item.recomendation}</Text>
+    </View>
+  );
+
   return (
-    <Slick
-      style={styles.wrapper}
-      showsButtons
-      slidesToShow={3}
-      showsPagination={false}
-      loop={false}
-      prevButton={<Text style={{ color: "black", fontSize: 40 }}>‹</Text>}
-      nextButton={<Text style={{ color: "black", fontSize: 40 }}>›</Text>}
-    >
-      <View testID="Hello" style={styles.slide}>
-        <Text style={styles.text}>Hello Slick</Text>
-      </View>
-      <View testID="Beautiful" style={styles.slide}>
-        <Text style={styles.text}>Beautiful</Text>
-      </View>
-      <View testID="Simple" style={styles.slide}>
-        <Text style={styles.text}>And simple</Text>
-      </View>
-      {/* Add more views here for additional slides */}
-    </Slick>
+   
+    <View style={styles.container}>
+      <Carousel
+        data={data}
+        renderItem={renderItem}
+        sliderWidth={screenWidth}
+        itemWidth={screenWidth * 0.4}
+        layout={'default'}
+        firstItem={1} // Start from the leftmost item
+       
+      />
+    </View>
+
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    height:"auto",
+  container: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingHorizontal:2,
   },
   slide: {
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#ebedec',
+    borderRadius: 5,
+    padding: 4, 
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'auto'
   },
-  text: {
-    color: "black",
-    fontSize: 20,
-    fontWeight: "bold",
+ 
+  recomendation: {
+    fontSize: 16,
   },
 });
