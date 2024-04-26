@@ -3,6 +3,7 @@
     "name": "datePal",
     "slug": "datePal",
     "version": "1.0.0",
+    "permissions": ["camera"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

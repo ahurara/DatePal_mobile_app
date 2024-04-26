@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 
-export default function CustomButton({ title, color, onPress }) {
+export default function CustomButton({ title, color,textColor, onPress }) {
   return (
-    <View style={styles.buttonContainer}>
-      <Button title={title} color={color} onPress={onPress} />
+    <View style={[styles.buttonContainer, { backgroundColor: color }]}>
+      <Button title={title} color={color} onPress={onPress} titleStyle={{color:textColor}} />
     </View>
   );
 }
@@ -12,10 +12,7 @@ export default function CustomButton({ title, color, onPress }) {
 const styles = StyleSheet.create({
 
   buttonContainer: {
-    alignSelf: 'flex-end',
-    marginVertical: 100,
-    marginRight: 20,
-    backgroundColor: {color},
+    marginVertical: 0,
     borderRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 5,

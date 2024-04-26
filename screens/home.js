@@ -21,7 +21,7 @@ export default function HomeScreen({ navigation }) {
         <Text style={{ color: 'black', fontWeight: 'bold', alignSelf: "flex-start", paddingLeft: 30 }}>Bringing Clarity to Your Moments</Text>
         <Text style={{ color: 'black', paddingLeft: 30, alignSelf: 'flex-start', paddingRight: 20 }}>Crystal Clear Moments, Effortless Date Classification – Your Memories, Simplified.</Text>
         <View style={styles.buttonContainer}>
-          <Button title='Continue' color="#2D1212" onPress={() => navigation.navigate('result')} />
+          <Button title='Continue' color="#2D1212" onPress={() => navigation.navigate('classification')} />
         </View>
 
       </View>
