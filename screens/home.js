@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Dimensions, Button, Image } from 'react-native';
+import CustomButton from '../components/button';
 
 export default function HomeScreen({ navigation }) {
   const windowHeight = Dimensions.get('window').height;
@@ -19,9 +20,10 @@ export default function HomeScreen({ navigation }) {
 
       <View style={[styles.bottomContainer, { height: bottomContainerHeight }]}>
         <Text style={{ color: 'black', fontWeight: 'bold', alignSelf: "flex-start", paddingLeft: 30 }}>Bringing Clarity to Your Moments</Text>
-        <Text style={{ color: 'black', paddingLeft: 30, alignSelf: 'flex-start', paddingRight: 20 }}>Crystal Clear Moments, Effortless Date Classification – Your Memories, Simplified.</Text>
-        <View style={styles.buttonContainer}>
-          <Button title='Continue' color="#2D1212" onPress={() => navigation.navigate('classification')} />
+        <Text style={{ color: 'black', paddingLeft: 30, alignSelf: 'flex-start', paddingRight: 20,marginBottom:150 }}>Crystal Clear Moments, Effortless Date Classification – Your Memories, Simplified.</Text>
+        
+        <View style={{alignSelf:'flex-end',marginRight:30}}>
+        <CustomButton title={"Continue"} color={"#2D1212"} textColor={"white"} onPress={() => navigation.navigate('classification')} />
         </View>
 
       </View>

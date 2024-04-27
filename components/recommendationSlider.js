@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Dimensions,ViewStyle  } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import Carousel from 'react-native-snap-carousel';
 
 export default function RecSlider() {

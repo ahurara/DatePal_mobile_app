@@ -68,6 +68,7 @@ export default function Result() {
     //if no data found this runs. can be used for error handling if data from api is null
     ListEmptyComponent={<Text>No data found</Text>}
     contentContainerStyle={styles.flatListContent}
+    //numColumns={1}
  >
     </FlatList>
 
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   flatListContent: {
     alignItems: "flex-start", // Align items to the start of the container
     flexDirection: "row", // Items are rendered in a row
-    flexWrap: "wrap", // Allow items to wrap to the next line
+     flexWrap: "wrap", // Allow items to wrap to the next line
     columnGap:15,
     rowGap:25,
   },

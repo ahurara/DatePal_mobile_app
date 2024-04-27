@@ -1,27 +1,32 @@
-import * as Permissions from "expo-permissions";
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet ,Dimensions} from "react-native";
 import { Camera } from "expo-camera";
 import { StatusBar } from "expo-status-bar";
 import CustomButton from "../components/button";
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 
-
-const Classification = () => {
+const Classification = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
+  const [imagePath, setImagePath] = useState(null);
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(true);
+ 
   
   useEffect(() => {
-    const getCameraPermission = async () => {
+    const requestPermissions = async () => {
       try {
-     
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        setHasCameraPermission(status === "granted");
+        const { status: cameraPermission } = await Camera.requestCameraPermissionsAsync();
+        setHasCameraPermission(cameraPermission === "granted");
+  
+        const { status: mediaLibraryPermission } = await MediaLibrary.requestPermissionsAsync();
+        setHasMediaLibraryPermission(mediaLibraryPermission === "granted");
       } catch (error) {
-        console.error("Error asking for camera permission:", error);
+        console.error("Error asking for permissions:", error);
       }
     };
-
-    getCameraPermission(); // Call the function to request camera permission
+  
+    requestPermissions();
   }, []);
   
 
@@ -39,13 +44,67 @@ const Classification = () => {
       </View>
     );
   }
-  const takePicture = async () => {
-    if (camera) {
-      const photo = await camera.takePictureAsync();
-      // Do something with the captured photo, like sending it for classification
-      console.log("Photo:", photo);
+
+  
+// Function to make a permanent copy of the image
+const makePermanentCopy = async (temporaryUri) => {
+  try {
+    // Generate a new permanent file path
+    const permanentUri = FileSystem.documentDirectory + 'permanent_photo.jpg';
+    
+    // Copy the image from the temporary location to the permanent location
+    await FileSystem.copyAsync({
+      from: temporaryUri,
+      to: permanentUri,
+    });
+
+    console.log("Permanent copy of the image created at:", permanentUri);
+    
+    return permanentUri; // Return the permanent file path
+  } catch (error) {
+    console.error("Error making permanent copy of the image:", error);
+    return null;
+  }
+};
+  
+const takePicture = async () => {
+  if (!hasCameraPermission) {
+    console.log("No camera permission");
+    return;
+  }
+
+  if (camera) {
+    try {
+      const photo = await camera.takePictureAsync({
+        quality: 0.5,
+        base64: true,
+      });
+
+      const temporaryUri = FileSystem.documentDirectory + 'photo.jpg';
+      await FileSystem.writeAsStringAsync(temporaryUri, photo.base64, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      setImagePath(temporaryUri);
+      console.log("Image saved at temporary location:", temporaryUri);
+
+      if (!hasMediaLibraryPermission) {
+        console.log("No media library permission");
+        return;
+      }
+
+      // Save image to the device's gallery
+      await MediaLibrary.saveToLibraryAsync(temporaryUri);
+      console.log("Image saved to gallery");
+      navigation.navigate('result');
+    } catch (error) {
+      console.error("Error taking or saving picture:", error);
     }
-  };
+  }
+};
+
+
+  
+  
 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -57,44 +116,26 @@ const Classification = () => {
     <View style={styles.container}>
     <StatusBar style="dark" />
 
-      <Text style={{fontWeight:'bold',fontSize:40}}>DatePal</Text>
+      <Text style={{fontWeight:'bold',fontSize:40,alignSelf:'center'}}>DatePal</Text>
 
-      <View style={{ height: cameraSize, width: cameraSize }}>
+      <View style={{ height: cameraSize+50, width: cameraSize,alignSelf:'center' }}>
         <Camera
           style={{ flex: 1 }}
           type={Camera.Constants.Type.back}
           ref={(ref) => setCamera(ref)}
           ratio="4:3"
-          flashMode={Camera.Constants.FlashMode.on}
+          flashMode={Camera.Constants.FlashMode.off}
         />
       </View>
 
-      <View style={{flexDirection:'row',gap:20,alignItems:'center',justifyContent:'center',marginTop:40}}>
+      <View style={{flexDirection:'row',flex:1,alignItems:'flex-start',justifyContent:'space-evenly',marginTop:40}}>
+   
 
-      <CustomButton
-          title="Retry"
-          color="#fff"
-          textColor="black"
-          onPress={{}}
-          style={{ borderWidth: 1, borderColor: "black" }}
-        />
+   <CustomButton title={"Retry"} color={"white"} textColor={"black"} onPress={() =>  navigation.navigate('result')} />
+   <CustomButton title={"Continue"} color={"#2D1212"} textColor={"white"} onPress={takePicture} />
 
-        <CustomButton
-          title="Continue"
-          color="#2D1212"
-          textColor="#fff"
-          onPress={{}}
-        />
-      {/* <View style={[styles.buttonContainer,{backgroundColor: "#fff"}]}>
-          <Button title='Retry' color="white" onPress={() => navigation.navigate('')} titleStyle={{color:'black'}} />
-        </View>
-      
 
-        <View style={[styles.buttonContainer,{backgroundColor: "#2D1212"}]}>
-          <Button title='Continue' color="#2D1212" onPress={() => navigation.navigate('')} />
-        </View> */}
       </View>
-      
     </View>
   );
 };
@@ -107,21 +148,6 @@ const styles = StyleSheet.create({
       gap:80,
       flexDirection:'column',
       justifyContent:'flex-start',
-      alignItems:'center',
-
-    },
-    // camera: {
-    //   height:{cameraSize},
-    //   width:{cameraSize},
-    //   aspectRatio: 9/10, // Set the aspect ratio here as well
-      
-    // },
-    buttonContainer: {
-     
-      marginTop:20,
-      borderRadius: 40,
-      paddingHorizontal: 20,
-      paddingVertical: 5,
     }
   });
 
