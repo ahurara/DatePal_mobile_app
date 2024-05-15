@@ -54,7 +54,7 @@ const Classification = ({ navigation }) => {
  
   
   useEffect(() => {
-connectWebSocket()
+// connectWebSocket()
 
     const requestPermissions = async () => {
       try {
@@ -122,7 +122,7 @@ const takePicture = async () => {
         base64: true,
       });
       // Send image to WebSocket server
-      sendImage(photo.base64);
+      // sendImage(photo.base64);
 
 
 
