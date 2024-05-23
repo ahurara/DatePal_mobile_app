@@ -8,7 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import RecSlider from "../components/recommendationSlider";
+//import RecSlider from "../components/recommendationSlider";
 import CalorieBox from "../components/caloriesBox";
 import NutritionCard from "../components/nutritionCard";
 import { nutritionData } from "./nutritionData";

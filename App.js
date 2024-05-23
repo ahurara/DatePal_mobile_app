@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./screens/home";
 import Result from "./screens/result";
 import Classification from "./screens/classification";
+import MyTabs from './components/tab';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +16,7 @@ export default function App() {
         screenOptions={{ headerShown: true }}
       >
         <Stack.Screen name="home" component={HomeScreen}  options={{ headerShown: false }}/>
-        <Stack.Screen name="result" component={Result}  options={{ headerTitle: "" }} />
+        <Stack.Screen name="result" component={MyTabs}  options={{ headerShown: false }} />
         <Stack.Screen name="classification" component={Classification}   options={{
             headerShown:false
           }}
