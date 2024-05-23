@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet,  Text,  TouchableOpacity } from 'react-native';
+import { StyleSheet,  Text,  TouchableOpacity, Pressable } from 'react-native';
 
 export default function CustomButton({ title, color,textColor, onPress }) {
 
   return (
-    <TouchableOpacity style={[styles.retryButton,{ backgroundColor: color}]} onPress={onPress}>
+    <Pressable style={[styles.retryButton,{ backgroundColor: color}]} onPress={onPress}>
         <Text style={[styles.buttonText,{color:textColor}]}>{title}</Text>
-      </TouchableOpacity>
+      </Pressable>
   );
 }
 

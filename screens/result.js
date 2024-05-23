@@ -49,7 +49,7 @@ export default function Result() {
 
       {/* slider for the recommendations */}
       <View style={{ marginBottom: 20 }}>
-        <RecSlider />
+        {/* <RecSlider /> */}
       </View>
 
       {/* Calories section */}

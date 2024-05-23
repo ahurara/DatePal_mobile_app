@@ -1,3 +1,4 @@
+import { registerRootComponent } from 'expo';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./screens/home";
@@ -23,3 +24,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+registerRootComponent(App); 
