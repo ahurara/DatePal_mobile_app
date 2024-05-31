@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, Dimensions } from "react-native";
-import { Camera , CameraView } from "expo-camera";
+import { Camera, CameraView } from "expo-camera";
 import { StatusBar } from "expo-status-bar";
 import CustomButton from "../components/button";
 import * as FileSystem from "expo-file-system";
@@ -96,7 +96,7 @@ const Classification = ({ navigation }) => {
         // Save image to the device's gallery
         await MediaLibrary.saveToLibraryAsync(temporaryUri);
         console.log("Image saved to gallery");
-        navigation.navigate("result");
+        navigation.navigate("result",{data});
       } catch (error) {
         console.error("Error taking or saving picture:", error);
       }
@@ -108,6 +108,26 @@ const Classification = ({ navigation }) => {
 
   const cameraSize = Math.min(windowWidth, windowHeight) * 0.8; // Set camera size to 80% of the minimum dimension
 
+  const data = {
+    _id: {
+      $oid: "662c0ad5bcb34a024b3caced",
+    },
+    name: "Ajwa",
+    calories: 27,
+    recommended_for: [
+      "Energy booster",
+      "Natural sweetener",
+      "Dietary fiber source",
+    ],
+    nutrition_info: {
+      fats: 0,
+      fiber: 0.3,
+      carbohydrates: 6.5,
+      sugar: 5.5,
+      protein: 0.3,
+    },
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
@@ -116,7 +136,7 @@ const Classification = ({ navigation }) => {
         DatePal
       </Text>
 
-      {hasCameraPermission  ? (
+      {hasCameraPermission ? (
         <View
           style={{
             height: cameraSize + 50,
