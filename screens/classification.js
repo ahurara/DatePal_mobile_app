@@ -47,6 +47,46 @@ const sendImage = async (base64Image) => {
   }
 };
 
+var ws;
+
+function connectWebSocket() {
+    // ws = new WebSocket("ws://192.168.43.61:8000/ws/dates_image/");
+    ws = new WebSocket("ws://34.228.36.102:8001/ws/dates_image/");
+    ws.onopen = function(event) {
+        console.log("WebSocket connection opened.");
+    };
+
+    ws.onmessage = function(event) {
+        console.log("Received message from server:", event.data);
+        var data = JSON.parse(event.data);
+        if (data && data.name) {
+          //yaha se aap ne navigate krna hay
+            console.log("Record details:", data);
+        } else {
+            console.log("No record found.");
+        }
+    };
+
+    ws.onclose = function(event) {
+        console.log("WebSocket connection closed.");
+    };
+};
+
+const sendImage = async (base64Image) => {
+  try {
+    if (ws.readyState === WebSocket.OPEN) {
+      // Send the base64 image data to the WebSocket server
+      ws.send(base64Image);
+      console.log("Image sent to WebSocket server");
+    } else {
+      console.log("WebSocket connection not open");
+    }
+  } catch (error) {
+    console.error("Error sending image to WebSocket server:", error);
+  }
+};
+
+
 const Classification = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -55,7 +95,11 @@ const Classification = ({ navigation }) => {
     useState(true);
 
   useEffect(() => {
+<<<<<<< HEAD
 connectWebSocket()
+=======
+// connectWebSocket()
+>>>>>>> 7e3dec585e77c15e1cdfd10b96243c27dd017ab5
 
     const requestPermissions = async () => {
       try {
@@ -100,10 +144,25 @@ connectWebSocket()
         from: temporaryUri,
         to: permanentUri,
       });
+      // Send image to WebSocket server
+      // sendImage(photo.base64);
+
+
 
       console.log("Permanent copy of the image created at:", permanentUri);
 
+<<<<<<< HEAD
       return permanentUri; // Return the permanent file path
+=======
+      if (!hasMediaLibraryPermission) {
+        console.log("No media library permission");
+        return;
+      }
+
+      // Save image to the device's gallery
+      await MediaLibrary.saveToLibraryAsync(temporaryUri);
+      console.log("Image saved to gallery");
+>>>>>>> 7e3dec585e77c15e1cdfd10b96243c27dd017ab5
     } catch (error) {
       console.error("Error making permanent copy of the image:", error);
       return null;
