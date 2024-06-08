@@ -12,8 +12,28 @@ import { Ionicons } from "@expo/vector-icons";
 import CalorieBox from "../components/caloriesBox";
 import NutritionCard from "../components/nutritionCard";
 import { nutritionData } from "./nutritionData";
+import RecSlider from "../components/recommendationSlider";
 
-export default function Result() {
+export default function Result({route}) {
+
+  const {data} = route.params;
+  console.log(data)
+
+  const nutritionMap = {
+    fiber: { icon: "leaf-outline", name: "Fiber" },
+    carbohydrates: { icon: "flower-outline", name: "Carbs" },
+    fats: { icon: "filter-circle-outline", name: "Fat" },
+    sugar: { icon: "cube-outline", name: "Sugar" },
+    protein: { icon: "flame-outline", name: "Protein" }
+  };
+
+  // Dynamically create nutritionData array
+  const nutritionsData = Object.keys(data.nutrition_info).map((key) => ({
+    icon: <Ionicons name={nutritionMap[key].icon} size={30} />,
+    name: nutritionMap[key].name,
+    calorie: `${data.nutrition_info[key]}g`
+  }));
+
   const windowHeight = Dimensions.get("window").height;
   const imgHeight = windowHeight * 0.3;
 
@@ -33,7 +53,7 @@ export default function Result() {
       <View style={styles.containera}>
         {/* Left View */}
         <View style={styles.leftView}>
-          <Text style={{ fontWeight: "bold", fontSize: 40 }}>Ajwa </Text>
+          <Text style={{ fontWeight: "bold", fontSize: 40 }}>{data.name} </Text>
         </View>
         {/* Right View */}
         <View style={styles.rightView}>
@@ -49,26 +69,25 @@ export default function Result() {
 
       {/* slider for the recommendations */}
       <View style={{ marginBottom: 20 }}>
-        {/* <RecSlider /> */}
+        <RecSlider recomendation={data.recommended_for} />
       </View>
 
       {/* Calories section */}
       <View style={{ marginBottom: 20, paddingHorizontal: 20 }}>
-        <CalorieBox calories={199} />
+        <CalorieBox calories={data.calories} />
       </View>
 
       {/* nutrition section */}
       <View style={{ padding: 20,backgroundColor:'#ebedec',marginHorizontal:20 }}>
       
       <FlatList  
-    data = {nutritionData}
+    data = {nutritionsData}
     renderItem={({item}) => { return (<NutritionCard key={item.id} {...item}/>)}}
-    // for horizontal rendering
-   // horizontal
+    ItemSeparatorComponent={() => <View style={styles.separator} />} // Add vertical gap
     //if no data found this runs. can be used for error handling if data from api is null
     ListEmptyComponent={<Text>No data found</Text>}
-    contentContainerStyle={styles.flatListContent}
-    //numColumns={1}
+    numColumns={3}
+    columnWrapperStyle={styles.columnWrapper} // Add horizontal gap
  >
     </FlatList>
 
@@ -104,17 +123,14 @@ const styles = StyleSheet.create({
   leftView: {
     width: "auto",
     height: 50,
-    //backgroundColor: 'red',
   },
   rightView: {
     width: "auto",
     height: 50,
   },
-  flatListContent: {
-    alignItems: "flex-start", // Align items to the start of the container
-    flexDirection: "row", // Items are rendered in a row
-     flexWrap: "wrap", // Allow items to wrap to the next line
-    columnGap:15,
-    rowGap:25,
+  columnWrapper: {
+    marginBottom: 15, // Adjust the bottom margin for spacing between rows
+    gap:25
   },
+ 
 });

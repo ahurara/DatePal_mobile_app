@@ -16,7 +16,7 @@ export default function App() {
         screenOptions={{ headerShown: true }}
       >
         <Stack.Screen name="home" component={HomeScreen}  options={{ headerShown: false }}/>
-        <Stack.Screen name="result" component={MyTabs}  options={{ headerShown: false }} />
+        <Stack.Screen name="Result" component={Result}  options={{ headerShown: true }} />
         <Stack.Screen name="classification" component={Classification}   options={{
             headerShown:false
           }}

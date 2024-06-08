@@ -1,56 +1,53 @@
-// import React from "react";
-// import { StyleSheet, Text, View, Dimensions } from "react-native";
-// import Carousel from 'react-native-snap-carousel';
+import React from "react";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
+import Carousel from 'react-native-snap-carousel';
 
-// export default function RecSlider() {
+export default function RecSlider({recomendation}) {
 
-//   const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get('window').width;
 
-//   const data = [
-//     {  recomendation: 'This is slide 1' },
-//     {  recomendation: 'This is slide 2' },
-//     {  recomendation: 'This is slide 3' },
-//   ];
+  const data = recomendation.map((item, index) => ({ id: index, recommendation: item }));
 
-//   const renderItem = ({ item }) => (
-//     <View style={styles.slide}>
-//       <Text style={styles.recomendation}>{item.recomendation}</Text>
-//     </View>
-//   );
+  const renderItem = ({ item }) => (
+    <View style={styles.slide}>
+      <Text style={styles.recomendation}>{item.recommendation}</Text>
+    </View>
+  );
 
-//   return (
+  return (
    
-//     <View style={styles.container}>
-//       <Carousel
-//         data={data}
-//         renderItem={renderItem}
-//         sliderWidth={screenWidth}
-//         itemWidth={screenWidth * 0.4}
-//         layout={'default'}
-//         firstItem={1} // Start from the leftmost item
+    <View style={styles.container}>
+      <Carousel
+        data={data}
+        renderItem={renderItem}
+        sliderWidth={screenWidth}
+        itemWidth={screenWidth * 0.5}
+        layout={'default'}
+        firstItem={1} // Start from the leftmost item
+        
        
-//       />
-//     </View>
+      />
+    </View>
 
-//   );
-// }
+  );
+}
 
-// const styles = StyleSheet.create({
-//   container: {
-//     alignItems: 'flex-start',
-//     justifyContent: 'flex-start',
-//     paddingHorizontal:2,
-//   },
-//   slide: {
-//     backgroundColor: '#ebedec',
-//     borderRadius: 5,
-//     padding: 4, 
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     width:'auto'
-//   },
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingHorizontal:2,
+  },
+  slide: {
+    backgroundColor: '#ebedec',
+    borderRadius: 5,
+    padding: 4, 
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'auto'
+  },
  
-//   recomendation: {
-//     fontSize: 16,
-//   },
-// });
+  recomendation: {
+    fontSize: 16,
+  },
+});
