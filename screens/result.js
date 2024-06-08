@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import CalorieBox from "../components/caloriesBox";
 import NutritionCard from "../components/nutritionCard";
 import { nutritionData } from "./nutritionData";
+import RecSlider from "../components/recommendationSlider";
 
 export default function Result({route}) {
 
@@ -68,7 +69,7 @@ export default function Result({route}) {
 
       {/* slider for the recommendations */}
       <View style={{ marginBottom: 20 }}>
-        {/* <RecSlider /> */}
+        <RecSlider recomendation={data.recommended_for} />
       </View>
 
       {/* Calories section */}

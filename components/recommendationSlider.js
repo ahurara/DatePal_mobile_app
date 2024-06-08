@@ -1,36 +1,35 @@
-import * as React from 'react';
-import { Dimensions, Text, View } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
+import React from "react";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
+import Carousel from 'react-native-snap-carousel';
 
-export default function RecSlider() {
+export default function RecSlider({recomendation}) {
 
-    const width = Dimensions.get('window').width;
-    return (
-        <View style={{ flex: 1 }}>
-            <Carousel
-                loop
-                width={width}
-                height={width / 2}
-                autoPlay={true}
-                data={[...new Array(6).keys()]}
-                scrollAnimationDuration={1000}
-                onSnapToItem={(index) => console.log('current index:', index)}
-                renderItem={({ index }) => (
-                    <View
-                        style={{
-                            flex: 1,
-                            borderWidth: 1,
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Text style={{ textAlign: 'center', fontSize: 30 }}>
-                            {index}
-                        </Text>
-                    </View>
-                )}
-            />
-        </View>
-    );
+  const screenWidth = Dimensions.get('window').width;
+
+  const data = recomendation.map((item, index) => ({ id: index, recommendation: item }));
+
+  const renderItem = ({ item }) => (
+    <View style={styles.slide}>
+      <Text style={styles.recomendation}>{item.recommendation}</Text>
+    </View>
+  );
+
+  return (
+   
+    <View style={styles.container}>
+      <Carousel
+        data={data}
+        renderItem={renderItem}
+        sliderWidth={screenWidth}
+        itemWidth={screenWidth * 0.5}
+        layout={'default'}
+        firstItem={1} // Start from the leftmost item
+        
+       
+      />
+    </View>
+
+  );
 }
 
 const styles = StyleSheet.create({
