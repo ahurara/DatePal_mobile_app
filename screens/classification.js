@@ -10,34 +10,64 @@ import Toast from 'react-native-toast-message';
 
 
 const Classification = ({ navigation }) => {
-  // var ws;
-  // // let data = '';
-  // function connectWebSocket() {
-  //     // ws = new WebSocket("ws://192.168.43.61:8000/ws/dates_image/");
-  //     ws = new WebSocket("ws://3.80.24.240:8001/ws/dates_image/");
-  //     ws.onopen = function(event) {
-  //         console.log("WebSocket connection opened.");
-  //     };
+  var ws;
+  // let data = '';
+  function connectWebSocket() {
+      // ws = new WebSocket("ws://192.168.43.61:8000/ws/dates_image/");
+      ws = new WebSocket("ws://100.24.253.126:8001/ws/dates_image/");
+      ws.onopen = function(event) {
+          console.log("WebSocket connection opened.");
+      };
 
-  //     ws.onmessage = function(event) {
-  //         console.log("Received message from server:", event.data);
-  //         var data = JSON.parse(event.data);
-  //         if (data && data.name) {
-  //           //yaha se aap ne navigate krna hay
-  //             console.log("Record details:", data);
-  //             navigation.navigate("result",{data});
-  //         } else {
-  //             console.log("No record found.");
-  //         }
-  //     };
+      ws.onmessage = function(event) {
+          console.log("Received message from server:", event.data);
+          var data = JSON.parse(event.data);
+          if (data && data.name) {
+            //yaha se aap ne navigate krna hay
+              console.log("Record details:", data);
+              Toast.show({
+                type:  "success" ,
+                text1: "Date classified. Loading results..." ,
+                position: "bottom",
+                bottomOffset: 150, // Adjust this value to move the toast slightly above the bottom
+              });
+      
+              
+                setTimeout(() => {
+                  navigation.navigate("Result", { data });
+                }, 10000);
+              
+              
+      
+          }
+          else if(data && data.error){
+            Toast.show({
+              type:  'error',
+              text1: 'Date not found. Try again.',
+              position: "bottom",
+              bottomOffset: 150, // Adjust this value to move the toast slightly above the bottom
+           
+            });
+    
+              console.log("No record found.");
+          }
+      };
 
-  //     ws.onclose = function(event) {
-  //         console.log("WebSocket connection closed.");
-  //     };
-  // };
+      ws.onclose = function(event) {
+        Toast.show({
+          type:  'error',
+          text1: 'No connection found.',
+          position: "bottom",
+          bottomOffset: 150, // Adjust this value to move the toast slightly above the bottom
+       
+        });
+          console.log("WebSocket connection closed.");
+      };
+  };
 
   const sendImage = async (base64Image) => {
     try {
+      
       if (ws.readyState === WebSocket.OPEN) {
         // Send the base64 image data to the WebSocket server
         ws.send(base64Image);
@@ -57,7 +87,7 @@ const Classification = ({ navigation }) => {
     useState(true);
 
   useEffect(() => {
-    //  connectWebSocket();
+    connectWebSocket();
     const requestPermissions = async () => {
       try {
         const { status: cameraPermission } =
@@ -133,19 +163,7 @@ const Classification = ({ navigation }) => {
         setImagePath(temporaryUri);
         console.log("Image saved at temporary location:", temporaryUri);
 
-        Toast.show({
-          type: data ? "success" : 'error',
-          text1: data ?"Date classified. Loading results..." :'Date not found. Try again.',
-          position: "bottom",
-          bottomOffset: 150, // Adjust this value to move the toast slightly above the bottom
-        });
-
-        if (data){
-          setTimeout(() => {
-            navigation.navigate("Result", { data });
-          }, 3000);
-        }
-
+      
         
 
         if (!hasMediaLibraryPermission) {
@@ -167,25 +185,25 @@ const Classification = ({ navigation }) => {
 
   const cameraSize = Math.min(windowWidth, windowHeight) * 0.8; // Set camera size to 80% of the minimum dimension
 
-  const data = {
-    _id: {
-      $oid: "662c0ad5bcb34a024b3caced",
-    },
-    name: "Ajwa",
-    calories: 27,
-    recommended_for: [
-      "Energy booster",
-      "Natural sweetener",
-      "Dietary fiber source",
-    ],
-    nutrition_info: {
-      fats: 0,
-      fiber: 0.3,
-      carbohydrates: 6.5,
-      sugar: 5.5,
-      protein: 0.3,
-    },
-  };
+  // const data = {
+  //   _id: {
+  //     $oid: "662c0ad5bcb34a024b3caced",
+  //   },
+  //   name: "Ajwa",
+  //   calories: 27,
+  //   recommended_for: [
+  //     "Energy booster",
+  //     "Natural sweetener",
+  //     "Dietary fiber source",
+  //   ],
+  //   nutrition_info: {
+  //     fats: 0,
+  //     fiber: 0.3,
+  //     carbohydrates: 6.5,
+  //     sugar: 5.5,
+  //     protein: 0.3,
+  //   },
+  // };
 
   return (
     <View style={styles.container}>
